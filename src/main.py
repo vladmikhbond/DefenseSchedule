@@ -18,7 +18,7 @@ def load_order_excell() -> List[Student]:
     8 Номер ДЕКу
     9 Дата захисту]
     """
-    path = r'.\Data\2024-2025_ПІ_Бакалаври.xlsx'
+    path = r'.\data\2024-2025_ПІ_Бакалаври.xlsx'
     sheet = 'Денне'
     result = []
     df = pd.read_excel(path, sheet, engine="openpyxl")
@@ -45,7 +45,7 @@ def load_order_excell() -> List[Student]:
     return result
 
 def load_slots_excell() -> List[Student]:
-    path = r'.\Data\2024-2025_ПІ_Бакалаври.xlsx'
+    path = r'.\data\2024-2025_ПІ_Бакалаври.xlsx'
     sheet = 'Дні захисту'
     result = []
     df = pd.read_excel(path, sheet, engine="openpyxl")
