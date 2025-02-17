@@ -1,7 +1,6 @@
 
 from typing import List
 from datetime import date
-# from teams import Team
 
 class Slot: 
     board_id: int

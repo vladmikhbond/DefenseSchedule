@@ -1,8 +1,8 @@
 
 from typing import List, Set
 from datetime import date
-from slots import Slot
-from students import Student
+from Slot import Slot
+from Student import Student
 
 class Team:
     students: List[Student] = []
@@ -40,20 +40,6 @@ class Team:
             return True
         return all(s.complex_mark == n for s in self.students)
         
-
-        
-    @staticmethod
-    def gather_teams(students: List[Student]) -> List:
-        theme_keys: Set[str] = set()
-        for student in students:
-            theme_keys.add(student.theme_key)
-
-        teams = []
-        for key in theme_keys:
-            team = Team()
-            team.students = [s for s in students if s.theme_key == key]
-            teams.append(team)
-        return teams
     
     def distance(self, slot:Slot):
         b1, d1 = self.desired_board_id, self.desired_day
