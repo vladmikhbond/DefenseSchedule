@@ -1,9 +1,9 @@
 from typing import List, Set
 import scipy
 import pandas as pd
-from Student import Student
-from Team import Team
-from Slot import Slot
+from students import Student
+from teams import Team
+from slots import Slot
 import random
 
 
@@ -58,7 +58,6 @@ def load_slots_excell() -> List[Student]:
         result.append(slot)
     return result
 
-
 def get_raitings(students: List[Student]):
     """ stub """
     random.seed = 42
@@ -73,7 +72,22 @@ def get_wishes(teams: List[Team], slots: List[Slot]):
         t.desired_day = slots[idx].day
         t.desired_board_id = 1 if random.random() < 0.8 else 2
 
-    
+
+
+def distribution(teams: List[Team], slots: List[Slot]):
+
+    teams.sort(key=lambda t: -t.rating)
+    for team in teams:
+        slot = team.find_nearest_slot(slots)
+        if slot:
+            team.board_id = slot.board_id
+            team.day = slot.day
+            slot.teams.append(team)
+        else:
+            raise IndexError("No accepteble slots")
+
+
+
 ############### MAIN ###############
 
 students = load_order_excell()
@@ -82,17 +96,11 @@ teams = Team.gather_teams(students)
 
 get_raitings(students)
 get_wishes(teams, slots)
-
-# for s in students:
-#     print(s.complex_mark, s.theme)
-#     print(s.name, s.group, s.prep, s.rating, '\r\n')
+distribution(teams, slots)
 
 for t in teams:
     # if not t.is_valid:
         print(t)
-
-# for s in slots:
-#     print(s)
 
 
 

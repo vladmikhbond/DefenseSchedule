@@ -1,14 +1,15 @@
 
 from typing import List, Set
 from datetime import date
-from Student import Student
+from slots import Slot
+from students import Student
 
 class Team:
     students: List[Student] = []
     desired_day: date
     desired_board_id: int
     day: date
-    board_id: int
+    board_id = 0
 
     @property
     def rating(self):
@@ -23,8 +24,13 @@ class Team:
         return self.students[0].prep or 'nobody'
     
     def __str__(self):
-        studs = ', '.join(s.name for s in self.students)
-        return f"{self.prep}:  {studs}  {self.desired_board_id} {self.desired_day}"
+        stud_names = ', '.join(s.name for s in self.students)
+        desired = (self.desired_board_id, self.desired_day.strftime('%d.%m') )
+        real = (self.board_id, self.day.strftime('%d.%m')) if self.board_id else 'n/a'
+        return f"prep: {self.prep}  studs:{stud_names} \n rating: {self.rating:.2f} desired: {desired} real: {real} " 
+
+    def __len__(self):
+        return len(self.students)    
     
     @property
     def is_valid(self) -> bool:
@@ -48,3 +54,21 @@ class Team:
             team.students = [s for s in students if s.theme_key == key]
             teams.append(team)
         return teams
+    
+    def distance(self, slot:Slot):
+        b1, d1 = self.desired_board_id, self.desired_day
+        b2, d2 = slot.board_id, slot.day
+
+        return abs(b1 - b2) * 10 + abs(d1.day_of_year - d2.day_of_year)
+
+    def find_nearest_slot(self, slots: List[Slot]):
+        accept_slots = [s for s in slots if s.free_places >= len(self)]
+        accept_slots.sort(key=lambda s: self.distance(s))
+        if len(accept_slots): 
+            return accept_slots[0]
+        return None
+        
+        
+        
+
+        
