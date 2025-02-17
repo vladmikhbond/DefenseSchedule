@@ -1,4 +1,4 @@
-from typing import List, Set
+from typing import List, Set, Tuple
 import pandas as pd
 from Student import Student
 from Team import Team
@@ -11,18 +11,18 @@ class Model:
     slots: List[Slot]
     
     def __init__(self):
-        self.students = Model.load_order_excell()
-        self.slots = Model.load_slots_excell()
-        self.teams = self.gather_teams()
-        self.add_raitings()
-        self.add_wishes()
+        self.students = Model._load_order_excell()
+        self.slots = Model._load_slots_excell()
+        self.teams = self._gather_teams()
+        self._add_raitings()
+        self._add_wishes()
 
-        self.distribution()
+        self._distribution()
         
 
 
     @staticmethod    
-    def load_order_excell() -> List[Student]:
+    def _load_order_excell() -> List[Student]:
         """ Номери колонок:
         1 Керівник
         2 Тема
@@ -60,7 +60,7 @@ class Model:
         return result
     
     @staticmethod
-    def load_slots_excell() -> List[Student]:
+    def _load_slots_excell() -> List[Student]:
         path = r'.\data\2024-2025_ПІ_Бакалаври.xlsx'
         sheet = 'Дні захисту'
         result = []
@@ -74,13 +74,13 @@ class Model:
             result.append(slot)
         return result
 
-    def add_raitings(self):
+    def _add_raitings(self):
         """ stub """
         random.seed = 42
         for st in self.students:
             st.rating = random.uniform(0, 100)
 
-    def add_wishes(self):
+    def _add_wishes(self):
         """ stub """
         random.seed = 42
         bottom, top = 5, len(self.slots) - 1
@@ -90,7 +90,7 @@ class Model:
             t.desired_board_id = 1 if random.random() < 0.8 else 2
 
     
-    def gather_teams(self) -> List[Team]:
+    def _gather_teams(self) -> List[Team]:
         theme_keys: Set[str] = set()
         for student in self.students:
             theme_keys.add(student.theme_key)
@@ -103,8 +103,8 @@ class Model:
         return teams
 
 
-    def distribution(self):
-
+    def _distribution(self):
+        """ single call only """
         self.teams.sort(key=lambda t: -t.rating)
         for team in self.teams:
             slot = team.find_nearest_slot(self.slots)
@@ -114,3 +114,25 @@ class Model:
                 slot.teams.append(team)
             else:
                 raise IndexError("No accepteble slots")
+        
+    
+    def csv_result(self):
+        """ board, day, student, theme, prep """
+        records: List[Tuple] = []
+        for t in self.teams:
+            for s in t.students:
+                records.append((
+                    str(t.board_id), 
+                    t.day.strftime('%d.%m'), 
+                    s.theme.replace('\n', ' ').replace('\t', ' ').replace('\r', ''), 
+                    s.name, 
+                    s.prep))
+            
+        records.sort()
+
+        with open("data/res.csv", 'w') as f:
+            for r in records:
+                print('\t'.join(r), file=f)
+
+
+
