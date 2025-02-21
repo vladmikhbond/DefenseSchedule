@@ -36,7 +36,7 @@ class Model:
         path = r'.\data\2024-2025_ПІ_Бакалаври.xlsx'
         sheet = 'Денне'
         result = []
-        df = pd.read_excel(path, sheet, engine="openpyxl")
+        df = pd.read_excel(path, sheet)  ##################
     
         df = df.fillna(0)
         prev_prep = 0
@@ -64,7 +64,7 @@ class Model:
         path = r'.\data\2024-2025_ПІ_Бакалаври.xlsx'
         sheet = 'Дні захисту'
         result = []
-        df = pd.read_excel(path, sheet, engine="openpyxl")
+        df = pd.read_excel(path, sheet)   ##################
         df = df.fillna(0)
         for i in range(len(df)):
             slot = Slot(
