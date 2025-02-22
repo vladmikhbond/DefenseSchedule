@@ -1,6 +1,7 @@
 from flask import Flask, render_template, flash, request
 from werkzeug import Request
 # from werkzeug.utils import secure_filename
+from Model import Model
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Потрібно для використання flash повідомлень
@@ -30,6 +31,8 @@ def valid_login(name:str, pass_: str):
 def do_work(request: Request):
     f = request.files['file_order']
     f.save(f"uploads/order.xlsx")
+    model = Model()
+    model.excell_result()
     return 'ok'
 
 if __name__ == '__main__':

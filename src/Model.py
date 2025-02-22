@@ -4,25 +4,31 @@ from Student import Student
 from Team import Team
 from Slot import Slot
 import random
+from pathlib import Path
 
+# Модель отримує шлях до вхідного excell-файлу, наприклад 'upload/2024-2025_ПІ_Бакалаври.xlsx'.
+# Вихідний файл 'result.xlsx' створюєься в тому ж каталозі, наприклад 'upload/result.xlsx'.
+# 
 class Model:
+
+    input_excell_file: str
     students: List[Student]
     teams: List[Team]
     slots: List[Slot]
-    
-    def __init__(self):
-        self.students = Model._load_order_excell()
-        self.slots = Model._load_slots_excell()
+    input_excell_file: str
+
+    def __init__(self, input_excell_file):
+        self.input_excell_file = input_excell_file
+        self.students = self._load_order_excell()
+        self.slots = self._load_slots_excell()
         self.teams = self._gather_teams()
         self._add_raitings()
         self._add_wishes()
 
         self._distribution()
         
-
-
-    @staticmethod    
-    def _load_order_excell() -> List[Student]:
+    
+    def _load_order_excell(self) -> List[Student]:
         """ Номери колонок:
         1 Керівник
         2 Тема
@@ -33,10 +39,9 @@ class Model:
         8 Номер ДЕКу
         9 Дата захисту]
         """
-        path = r'.\data\2024-2025_ПІ_Бакалаври.xlsx'
         sheet = 'Денне'
         result = []
-        df = pd.read_excel(path, sheet)  ##################
+        df = pd.read_excel(self.input_excell_file, sheet)  ##################
     
         df = df.fillna(0)
         prev_prep = 0
@@ -59,12 +64,11 @@ class Model:
         
         return result
     
-    @staticmethod
-    def _load_slots_excell() -> List[Student]:
-        path = r'.\data\2024-2025_ПІ_Бакалаври.xlsx'
+    def _load_slots_excell(self) -> List[Student]:
+        
         sheet = 'Дні захисту'
         result = []
-        df = pd.read_excel(path, sheet)   ##################
+        df = pd.read_excel(self.input_excell_file, sheet)  ##################
         df = df.fillna(0)
         for i in range(len(df)):
             slot = Slot(
@@ -115,24 +119,23 @@ class Model:
             else:
                 raise IndexError("No accepteble slots")
         
-    
-    def csv_result(self):
-        """ board, day, student, theme, prep """
-        records: List[Tuple] = []
+    def excell_result(self):
+        df = pd.DataFrame([], columns=['ДЕК', 'Дата', 'Назва теми', 'Студент', 'Керівник'])
+        i = 1
         for t in self.teams:
-            for s in t.students:
-                records.append((
-                    str(t.board_id), 
-                    t.day.strftime('%d.%m'), 
-                    s.theme.replace('\n', ' ').replace('\t', ' ').replace('\r', ''), 
-                    s.name, 
-                    s.prep))
-            
-        records.sort()
-
-        with open("data/res.csv", 'w') as f:
-            for r in records:
-                print('\t'.join(r), file=f)
+                for s in t.students:
+                    df.loc[i] = [str(t.board_id), 
+                        t.day.strftime('%d.%m'), 
+                        s.theme.replace('\n', ' ').replace('\t', ' ').replace('\r', ''),
+                        s.name, 
+                        s.prep]
+                    i += 1
+        df_sorted = df.sort_values(by=[df.columns[0], df.columns[1]]) 
+        
+        # write down result 
+        file_path = Path(self.input_excell_file)
+        folder_path = file_path.parent
+        df_sorted.to_excel(f"{folder_path}/result.xlsx", index=False)
 
 
 
