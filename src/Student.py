@@ -10,7 +10,7 @@ class Student:
     prep: str
     #
     rating = 0.0
-    theme_key: str;
+    theme_key: str
  
     def __init__(self, name: str, group: str, theme: str, complex_mark: int, prep: str):
         self.name = name
@@ -19,7 +19,7 @@ class Student:
         self.complex_mark = complex_mark
         self.prep = prep
 
-        pointIdx = self.theme.find('.');
+        pointIdx = self.theme.find('.')
         key = theme if pointIdx == -1 else theme[0:pointIdx]
         self.theme_key = key.replace('\n', '').replace('\r', '').lower().strip()
 

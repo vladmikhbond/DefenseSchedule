@@ -15,7 +15,6 @@ class Model:
     students: List[Student]
     teams: List[Team]
     slots: List[Slot]
-    input_excell_file: str
 
     def __init__(self, input_excell_file):
         self.input_excell_file = input_excell_file
@@ -35,13 +34,10 @@ class Model:
         4 Комплекс
         5 Студент
         6 Група
-        [7 Рейтінг
-        8 Номер ДЕКу
-        9 Дата захисту]
         """
         sheet = 'Денне'
         result = []
-        df = pd.read_excel(self.input_excell_file, sheet)  ##################
+        df = pd.read_excel(self.input_excell_file, sheet)
     
         df = df.fillna(0)
         prev_prep = 0
@@ -51,6 +47,7 @@ class Model:
                 prep = prev_prep
             else:
                 prev_prep = prep
+
             if df.iloc[i, 2] == 0:
                 df.iloc[i, 2] = f'no theme {id(i)}'
             student = Student(
@@ -68,7 +65,7 @@ class Model:
         
         sheet = 'Дні захисту'
         result = []
-        df = pd.read_excel(self.input_excell_file, sheet)  ##################
+        df = pd.read_excel(self.input_excell_file, sheet)
         df = df.fillna(0)
         for i in range(len(df)):
             slot = Slot(
@@ -82,7 +79,7 @@ class Model:
         """ stub """
         random.seed = 42
         for st in self.students:
-            st.rating = random.uniform(0, 100)
+            st.rating = random.uniform(60, 100)
 
     def _add_wishes(self):
         """ stub """

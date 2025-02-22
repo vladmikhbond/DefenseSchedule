@@ -4,7 +4,7 @@ from werkzeug import Request
 from Model import Model
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Потрібно для використання flash повідомлень
+# app.secret_key = 'your_secret_key'  # Потрібно для використання flash повідомлень
 
 
 @app.route('/bach', methods=['GET', 'POST'])
@@ -29,9 +29,10 @@ def valid_login(name:str, pass_: str):
     return True
 
 def do_work(request: Request):
+    PATH = f"uploads/order.xlsx"
     f = request.files['file_order']
-    f.save(f"uploads/order.xlsx")
-    model = Model()
+    f.save(PATH)
+    model = Model(PATH)
     model.excell_result()
     return 'ok'
 
