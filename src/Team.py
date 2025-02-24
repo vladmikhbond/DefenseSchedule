@@ -39,22 +39,6 @@ class Team:
         if n == 1 and self.students[0].complex_mark <= 1:
             return True
         return all(s.complex_mark == n for s in self.students)
-        
-    
-    def distance(self, slot:Slot):
-        b1, d1 = self.desired_board_id, self.desired_day
-        b2, d2 = slot.board_id, slot.day
 
-        return abs(b1 - b2) * 10 + abs(d1.day_of_year - d2.day_of_year)
-
-    def find_nearest_slot(self, slots: List[Slot]):
-        accept_slots = [s for s in slots if s.free_places >= len(self)]
-        accept_slots.sort(key=lambda s: self.distance(s))
-        if len(accept_slots): 
-            return accept_slots[0]
-        return None
-        
-        
-        
 
         

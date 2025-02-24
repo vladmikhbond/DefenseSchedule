@@ -5,12 +5,21 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python Debugger: Current File with Arguments",
+            "name": "Console App",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "C:\\Git\\PY\\DefenseSchedule\\src\\main.py",
+            "console": "integratedTerminal"
+            
+        },
+        {
+            "name": "Web App",
             "type": "debugpy",
             "request": "launch",
             "program": "C:\\Git\\PY\\DefenseSchedule\\src\\app.py",
             "console": "integratedTerminal"
             
         }
+
     ]
 }

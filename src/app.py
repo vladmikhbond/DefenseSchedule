@@ -2,9 +2,11 @@ from flask import Flask, render_template, flash, request, send_file
 from werkzeug import Request
 # from werkzeug.utils import secure_filename
 from Model import Model
+import re
 
 PATH_TO_ORDER = "uploads/order.xlsx"
 PATH_TO_RESULT = r"..\uploads\result.xlsx"
+DEFAULT_WEIGHTS = (10, 1)
 
 
 app = Flask(__name__)
@@ -38,7 +40,16 @@ def do_work(request: Request):
     
     f = request.files['file_order']
     f.save(PATH_TO_ORDER)
-    model = Model(PATH_TO_ORDER)
+
+    # parse weights
+    weights_str = request.form['weights'].strip()
+    match = re.match(r"(\d+)\s*:\s*(\d+)", weights_str)
+    if match:
+        weights = (int(match.group(1)), int(match.group(2)))
+    else:
+        weights = DEFAULT_WEIGHTS
+ 
+    model = Model(PATH_TO_ORDER, weights)
     model.excell_result()
 
 

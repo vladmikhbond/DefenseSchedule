@@ -6,17 +6,22 @@ from Slot import Slot
 import random
 from pathlib import Path
 
-# Модель отримує шлях до вхідного excell-файлу, наприклад 'upload/2024-2025_ПІ_Бакалаври.xlsx'.
-# Вихідний файл 'result.xlsx' створюєься в тому ж каталозі, наприклад 'upload/result.xlsx'.
-# 
 class Model:
+    """
+    Модель отримує відносний шлях до вхідного excell-файлу, наприклад, 'upload/Наказ.xlsx' зі вкладками Денне, ДЕК, Рейтинг, Бажання.
+
+    Вихідний файл 'result.xlsx' створюєься в тому ж каталозі, наприклад, 'upload/result.xlsx'.
+    """
 
     input_excell_file: str
+    weights: Tuple[float, float]
+
     students: List[Student]
     teams: List[Team]
     slots: List[Slot]
-
-    def __init__(self, input_excell_file):
+   
+    def __init__(self, input_excell_file, weights: Tuple[float, float]):
+        self.weights = weights
         self.input_excell_file = input_excell_file
         self.students = self._load_order_excell()
         self.slots = self._load_slots_excell()
@@ -25,8 +30,16 @@ class Model:
         self._add_wishes()
 
         self._distribution()
-        
-    
+        """  """
+    @staticmethod 
+    def fill_disjunct_cells(df, j):
+        prev_val = 0
+        for i in range(len(df)):        
+            if df.iloc[i, j] == 0:
+                df.iloc[i, j] = prev_val
+            else:
+                prev_val = df.iloc[i, j]
+
     def _load_order_excell(self) -> List[Student]:
         """ Номери колонок:
         1 Керівник
@@ -38,16 +51,10 @@ class Model:
         sheet = 'Денне'
         result = []
         df = pd.read_excel(self.input_excell_file, sheet)
-    
         df = df.fillna(0)
-        prev_prep = 0
-        for i in range(len(df)):
-            prep = df.iloc[i, 1]        
-            if prep == 0:
-                prep = prev_prep
-            else:
-                prev_prep = prep
+        Model.fill_disjunct_cells(df, 1) 
 
+        for i in range(len(df)):
             if df.iloc[i, 2] == 0:
                 df.iloc[i, 2] = f'no theme {id(i)}'
             student = Student(
@@ -55,7 +62,7 @@ class Model:
                 group=df.iloc[i, 6], 
                 theme=df.iloc[i, 2], 
                 complex_mark=(int)(df.iloc[i, 4]), 
-                prep=prep) 
+                prep=df.iloc[i, 1]) 
             
             result.append(student)
         
@@ -89,8 +96,8 @@ class Model:
             idx = random.randint(bottom, top)
             t.desired_day = self.slots[idx].day
             t.desired_board_id = 1 if random.random() < 0.8 else 2
-
-    
+            pass
+  
     def _gather_teams(self) -> List[Team]:
         theme_keys: Set[str] = set()
         for student in self.students:
@@ -103,12 +110,11 @@ class Model:
             teams.append(team)
         return teams
 
-
     def _distribution(self):
         """ single call only """
         self.teams.sort(key=lambda t: -t.rating)
         for team in self.teams:
-            slot = team.find_nearest_slot(self.slots)
+            slot = self.find_nearest_slot(team)
             if slot:
                 team.board_id = slot.board_id
                 team.day = slot.day
@@ -135,4 +141,17 @@ class Model:
         df_sorted.to_excel(f"{folder_path}/result.xlsx", index=False)
 
 
+    def distance(self, team: Team, slot: Slot):
+        b1, d1 = team.desired_board_id, team.desired_day.day_of_year
+        b2, d2 = slot.board_id, slot.day.day_of_year
+        return self.weights[0] * abs(b1 - b2) + self.weights[1] * abs(d1 - d2)
+
+
+    def find_nearest_slot(self, team):
+        accept_slots = [s for s in self.slots if s.free_places >= len(team)]
+        accept_slots.sort(key=lambda slot: self.distance(team, slot))
+        if len(accept_slots): 
+            return accept_slots[0]
+        return None
+        
 
