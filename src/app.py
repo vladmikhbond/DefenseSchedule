@@ -50,7 +50,7 @@ def do_work(request: Request):
         weights = DEFAULT_WEIGHTS
  
     model = Model(PATH_TO_ORDER, weights)
-    model.excell_result()
+    
 
 
 if __name__ == '__main__':

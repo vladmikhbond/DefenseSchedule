@@ -9,7 +9,7 @@ class Team:
     desired_day: date
     desired_board_id: int
     day: date
-    board_id = 0
+    board_id:int = 0
 
     @property
     def rating(self):
@@ -23,11 +23,16 @@ class Team:
     def prep(self):
         return self.students[0].prep or 'nobody'
     
+    @property
+    def desired(self):
+        return (self.students[0].desired_board_id, self.students[0].desired_day)
+    
+    
     def __str__(self):
         stud_names = ', '.join(s.name for s in self.students)
-        desired = (self.desired_board_id, self.desired_day.strftime('%d.%m') )
+        
         real = (self.board_id, self.day.strftime('%d.%m')) if self.board_id else 'n/a'
-        return f"prep: {self.prep}  studs:{stud_names} \n rating: {self.rating:.2f} desired: {desired} real: {real} " 
+        return f"prep: {self.prep}  studs:{stud_names} \n rating: {self.rating:.2f} desired: {self.desired} real: {real} " 
 
     def __len__(self):
         return len(self.students)    
