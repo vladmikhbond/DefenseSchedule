@@ -8,7 +8,7 @@ from pathlib import Path
 
 class Model:
     """
-    Модель отримує відносний шлях до вхідного excell-файлу, наприклад, 'upload/Наказ.xlsx' зі вкладками Денне, ДЕК, Рейтинг, Бажання.
+    Модель отримує відносний шлях до вхідного excell-, наприклад, 'upload/Наказ.xlsx' зі вкладками Денне, ДЕК, Рейтинг, Бажання.
 
     Вихідний файл 'result.xlsx' створюєься в тому ж каталозі, наприклад, 'upload/result.xlsx'.
     """
@@ -23,16 +23,20 @@ class Model:
     def __init__(self, input_excell_file, weights: Tuple[float, float]):
         self.weights = weights
         self.input_excell_file = input_excell_file
-        self.students = self._load_order_excell()
-        self.slots = self._load_slots_excell()
+        self.students = self._load_order_sheet()
+        self.slots = self._load_board_sheet()
         self.teams = self._gather_teams()
-        self._add_raitings()
+        self._load_rating_sheet()
         self._add_wishes()
 
         self._distribution()
-        """  """
+
+    
+    
     @staticmethod 
-    def fill_disjunct_cells(df, j):
+    
+    def fill_gaps(df, j):
+        """ Заповнення пустот, що виникли псля об'єднання клітинок"""
         prev_val = 0
         for i in range(len(df)):        
             if df.iloc[i, j] == 0:
@@ -40,7 +44,7 @@ class Model:
             else:
                 prev_val = df.iloc[i, j]
 
-    def _load_order_excell(self) -> List[Student]:
+    def _load_order_sheet(self) -> List[Student]:
         """ Номери колонок:
         1 Керівник
         2 Тема
@@ -48,12 +52,11 @@ class Model:
         5 Студент
         6 Група
         """
-        sheet = 'Денне'
-        result = []
+        sheet = 'Денне'        
         df = pd.read_excel(self.input_excell_file, sheet)
         df = df.fillna(0)
-        Model.fill_disjunct_cells(df, 1) 
-
+        Model.fill_gaps(df, 1) 
+        result = []
         for i in range(len(df)):
             if df.iloc[i, 2] == 0:
                 df.iloc[i, 2] = f'no theme {id(i)}'
@@ -68,12 +71,13 @@ class Model:
         
         return result
     
-    def _load_slots_excell(self) -> List[Student]:
-        
-        sheet = 'Дні захисту'
-        result = []
+    def _load_board_sheet(self) -> List[Student]:   
+        sheet = 'ДЕК'
         df = pd.read_excel(self.input_excell_file, sheet)
         df = df.fillna(0)
+        Model.fill_gaps(df, 0)
+        
+        result = []
         for i in range(len(df)):
             slot = Slot(
                 int(df.iloc[i, 0]), 
@@ -82,11 +86,19 @@ class Model:
             result.append(slot)
         return result
 
-    def _add_raitings(self):
-        """ stub """
-        random.seed = 42
-        for st in self.students:
-            st.rating = random.uniform(60, 100)
+    def _load_rating_sheet(self):
+        sheet = 'Рейтинг'
+        df = pd.read_excel(self.input_excell_file, sheet)
+        df = df.fillna(0)
+        Model.fill_gaps(df, 0)
+
+        for i in range(len(df)):
+            group, name, rating = df.iloc[i, :]
+            students = list(filter(lambda stud: stud.group == group and stud.name == name, self.students))
+            if (len(students) == 1):  
+                students[0].rating = rating
+    
+
 
     def _add_wishes(self):
         """ stub """
