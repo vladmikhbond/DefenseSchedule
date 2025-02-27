@@ -1,3 +1,5 @@
+import io
+import zipfile
 from flask import Flask, render_template, flash, request, send_file
 from werkzeug import Request
 # from werkzeug.utils import secure_filename
@@ -23,8 +25,9 @@ def calc():
         return render_template('form.html')
     # POST
     if valid_login(request.form['username'], request.form['password']):
-        do_work(request)
-
+        log_path = do_work(request)
+        return download_zip(log_path)
+     
         return send_file(PATH_TO_RESULT, as_attachment=True, download_name="result.xlsx",
                      mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
     else:
@@ -50,7 +53,20 @@ def do_work(request: Request):
         weights = DEFAULT_WEIGHTS
  
     model = Model(PATH_TO_ORDER, weights)
-    
+    return model.log.path
+
+def download_zip(log_path):
+    # Створюємо ZIP-архів у пам'яті
+    zip_buffer = io.BytesIO()
+    with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+        zip_file.write('uploads/result.xlsx', 'result.xlsx')  # Додаємо перший файл
+        zip_file.write(log_path, 'result.log')  # Додаємо другий файл
+
+    zip_buffer.seek(0)  # Перемотуємо до початку
+
+    return send_file(zip_buffer, as_attachment=True, download_name="files.zip",
+                     mimetype="application/zip")
+   
 
 
 if __name__ == '__main__':

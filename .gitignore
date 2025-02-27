@@ -2,4 +2,5 @@ data/~$2024-2025_ПІ_Бакалаври.xlsx
 src/__pycache__
 src/111.html
 data/result.xlsx
+data/*.log
 uploads
