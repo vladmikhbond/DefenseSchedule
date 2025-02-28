@@ -6,27 +6,21 @@ from Student import Student
 
 class Team:
     students: List[Student] = []
-    desired_day: date
-    desired_board_id: int
-    day: date
-    board_id:int = 0
-
-    @property
-    def rating(self):
-        """ Середній рейтинг членів команди """
-        n = len(self.students)
-        if n :
-            return sum(student.rating for student in self.students) / n
-        return 0
+    day = date(1,1,1)
+    board_id = 0
+    rating: int   # Середній рейтинг членів команди
+    
+    def __init__(self, students: List[Student]):
+        self.students = students
+        self.rating = sum(st.rating for st in students) / len(students)
+        day = max(st.desired_day for st in students)
+        id = max(st.desired_board_id for st in students)
+        self.desired = (day, id)
+        
 
     @property
     def prep(self):
-        return self.students[0].prep or 'nobody'
-    
-    @property
-    def desired(self):
-        return (self.students[0].desired_board_id, self.students[0].desired_day)
-    
+        return self.students[0].prep or 'nobody'    
     
     def __str__(self):
         stud_names = ', '.join(s.name for s in self.students)

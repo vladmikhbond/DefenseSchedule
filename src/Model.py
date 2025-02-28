@@ -127,16 +127,24 @@ class Model:
 
   
     def _gather_teams(self) -> List[Team]:
-        theme_keys: Set[str] = set()
+        self.log.print(f"\nСтворення команд \n ---")
+        set_of_keys: Set[str] = set()
         for student in self.students:
-            theme_keys.add(student.theme_key)
+            set_of_keys.add(student.theme_key)
 
+        # one theme_key is one team
         teams = []
-        for key in theme_keys:
-            team = Team()
-            team.students = [s for s in self.students if s.theme_key == key]
-            teams.append(team)
+        for key in set_of_keys:
+            team_students = [s for s in self.students if s.theme_key == key]            
+            team = Team(team_students)
+            if len(team.students) > 0:
+                teams.append(team)
+                if team.desired[0] == date(1,1,1) or team.desired[1] == 0: 
+                    self.log.print(f"Не обраний ДЕК чи дата захисту в команді: {key}")
+            else:
+                self.log.print(f"Пуста команда {key}")
         return teams
+
 
     def _distribution(self):
         """ single call only """
