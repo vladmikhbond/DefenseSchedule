@@ -16,7 +16,7 @@
             "name": "Web App",
             "type": "debugpy",
             "request": "launch",
-            "program": "C:\\Git\\PY\\DefenseSchedule\\src\\app1.py",
+            "program": "C:\\Git\\PY\\DefenseSchedule\\run.py",
             "console": "integratedTerminal"
             
         }

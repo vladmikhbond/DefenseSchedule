@@ -4,7 +4,6 @@ src/Model.py
 src/Slot.py
 src/Student.py
 src/Team.py
-src/app.py
 src/main.py
 src/defense.egg-info/PKG-INFO
 src/defense.egg-info/SOURCES.txt

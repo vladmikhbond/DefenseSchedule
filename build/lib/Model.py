@@ -1,12 +1,12 @@
 from typing import List, Set, Tuple
 import pandas as pd
-from Student import Student
-from Team import Team
-from Slot import Slot
+from src.Student import Student
+from src.Team import Team
+from src.Slot import Slot
 import random
 from pathlib import Path
 from datetime import date
-from Log import Log
+from src.Log import Log
 
 
 class Model:

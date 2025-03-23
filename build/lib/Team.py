@@ -1,8 +1,7 @@
 
 from typing import List, Set
 from datetime import date
-from Slot import Slot
-from Student import Student
+from src.Student import Student
 
 class Team:
     students: List[Student] = []
