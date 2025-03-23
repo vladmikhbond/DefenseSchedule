@@ -1,0 +1,12 @@
+pyproject.toml
+src/Log.py
+src/Model.py
+src/Slot.py
+src/Student.py
+src/Team.py
+src/app.py
+src/main.py
+src/defense_schedule.egg-info/PKG-INFO
+src/defense_schedule.egg-info/SOURCES.txt
+src/defense_schedule.egg-info/dependency_links.txt
+src/defense_schedule.egg-info/top_level.txt
