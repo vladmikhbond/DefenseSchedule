@@ -3,7 +3,7 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "defense"  
+name = "def_shed"  
 version = "0.1.0"  
 description = "A project for managing defense schedules"  
 authors = [{ name = "vmbo", email = "vmbo@gmail.com" }] 
@@ -14,3 +14,6 @@ dependencies = [
     "pandas >= 1.3.0,<3.0.0",
     "openpyxl >= 3.0.0,<4.0.0"
 ]
+
+[tool.setuptools.packages]
+find = { include = ["def_shed*"]}

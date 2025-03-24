@@ -3,7 +3,7 @@ import zipfile
 from flask import Flask, render_template, flash, request, send_file
 from werkzeug import Request
 # from werkzeug.utils import secure_filename
-from src.Model import Model
+from .Model import Model
 import re
 
 PATH_TO_INPUT_XLS = "uploads/input.xlsx"

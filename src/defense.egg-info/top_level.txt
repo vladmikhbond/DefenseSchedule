@@ -1,6 +1,0 @@
-Log
-Model
-Slot
-Student
-Team
-main

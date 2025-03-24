@@ -1,7 +1,7 @@
 
 from typing import List, Set
 from datetime import date
-from src.Student import Student
+from .Student import Student
 
 class Team:
     students: List[Student] = []

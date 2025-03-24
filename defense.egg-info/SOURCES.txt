@@ -1,0 +1,15 @@
+pyproject.toml
+setup.cfg
+defense/Log.py
+defense/Model.py
+defense/Slot.py
+defense/Student.py
+defense/Team.py
+defense/__init__.py
+defense/main.py
+defense/run.py
+defense.egg-info/PKG-INFO
+defense.egg-info/SOURCES.txt
+defense.egg-info/dependency_links.txt
+defense.egg-info/requires.txt
+defense.egg-info/top_level.txt

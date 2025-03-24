@@ -8,7 +8,7 @@
             "name": "Console App",
             "type": "debugpy",
             "request": "launch",
-            "program": "C:\\Git\\PY\\DefenseSchedule\\src\\main.py",
+            "program": "C:\\Git\\PY\\DefenseSchedule\\def_shed\\main.py",
             "console": "integratedTerminal"
             
         },
@@ -16,7 +16,7 @@
             "name": "Web App",
             "type": "debugpy",
             "request": "launch",
-            "program": "C:\\Git\\PY\\DefenseSchedule\\run.py",
+            "program": "C:\\Git\\PY\\DefenseSchedule\\def_shed\\run.py",
             "console": "integratedTerminal"
             
         }
