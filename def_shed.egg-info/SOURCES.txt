@@ -5,8 +5,7 @@ def_shed/Slot.py
 def_shed/Student.py
 def_shed/Team.py
 def_shed/__init__.py
-def_shed/main.py
-def_shed/run.py
+def_shed/routes.py
 def_shed.egg-info/PKG-INFO
 def_shed.egg-info/SOURCES.txt
 def_shed.egg-info/dependency_links.txt

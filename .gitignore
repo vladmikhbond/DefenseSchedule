@@ -1,5 +1,7 @@
 data/~$2024-2025_ПІ_Бакалаври.xlsx
-defense/__pycache__
+def_shed/__pycache__
 data/result.xlsx
+build
+dist
 data/*.log
 uploads
