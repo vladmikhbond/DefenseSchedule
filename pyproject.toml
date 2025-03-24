@@ -16,4 +16,4 @@ dependencies = [
 ]
 
 [tool.setuptools.packages]
-find = { include = ["def_shed*"]}
+find = { include = ["def_shed*", "def_shed/templates*"] }

@@ -14,7 +14,7 @@ from flask import Blueprint
 main = Blueprint("main", __name__)
 
 
-main.secret_key = 'your_secret_key'  # Потрібно для використання flash повідомлень
+# main.secret_key = 'your_secret_key'  # Потрібно для використання flash повідомлень
 
 
 @main.route('/bach', methods=['GET', 'POST'])

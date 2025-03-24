@@ -1,3 +1,4 @@
+MANIFEST.in
 pyproject.toml
 def_shed/Log.py
 def_shed/Model.py
@@ -11,3 +12,6 @@ def_shed.egg-info/SOURCES.txt
 def_shed.egg-info/dependency_links.txt
 def_shed.egg-info/requires.txt
 def_shed.egg-info/top_level.txt
+def_shed/templates/111.html
+def_shed/templates/base.html
+def_shed/templates/form.html
