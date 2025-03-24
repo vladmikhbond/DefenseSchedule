@@ -1,6 +1,6 @@
 import io
 import zipfile
-from flask import Flask, render_template, flash, request, send_file
+from flask import render_template, flash, request, send_file
 from werkzeug import Request
 # from werkzeug.utils import secure_filename
 from .Model import Model
