@@ -10,12 +10,14 @@ PATH_TO_INPUT_XLS = "uploads/input.xlsx"
 PATH_TO_RESULT_XLS = "uploads/result.xlsx"
 DEFAULT_WEIGHTS = (10, 1)
 
+from flask import Blueprint
+main = Blueprint("main", __name__)
 
-app = Flask(__name__)
-# app.secret_key = 'your_secret_key'  # Потрібно для використання flash повідомлень
+
+main.secret_key = 'your_secret_key'  # Потрібно для використання flash повідомлень
 
 
-@app.route('/bach', methods=['GET', 'POST'])
+@main.route('/bach', methods=['GET', 'POST'])
 def calc():
     # flash('This is a flashed message!')
     # flash('This is another flashed message!')
