@@ -7,8 +7,8 @@ def create_app():
     # app.config.from_object("config.Config")
 
     # Імпорт маршрутів та реєстрація Blueprint'ів
-    from .routes import main
-    app.register_blueprint(main)
+    from .routes import bp
+    app.register_blueprint(bp)
 
     return app
 

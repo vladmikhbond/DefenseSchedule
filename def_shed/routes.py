@@ -11,13 +11,13 @@ PATH_TO_RESULT_XLS = "uploads/result.xlsx"
 DEFAULT_WEIGHTS = (10, 1)
 
 from flask import Blueprint
-main = Blueprint("main", __name__)
+bp = Blueprint("main", __name__)
 
 
 # main.secret_key = 'your_secret_key'  # Потрібно для використання flash повідомлень
 
 
-@main.route('/bach', methods=['GET', 'POST'])
+@bp.route('/bach', methods=['GET', 'POST'])
 def calc():
     # flash('This is a flashed message!')
     # flash('This is another flashed message!')
@@ -64,8 +64,3 @@ def download_zip(log_path):
 
     return send_file(zip_buffer, as_attachment=True, download_name="result.zip",
                      mimetype="application/zip")
-   
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
